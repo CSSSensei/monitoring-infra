@@ -1,0 +1,94 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "graphTooltip": 1,
+  "panels": [
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {
+        "defaults": {"mappings": [{"options": {"0": {"text": "DOWN"}, "1": {"text": "UP"}}, "type": "value"}], "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]}, "unit": "short"},
+        "overrides": []
+      },
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+      "id": 1,
+      "options": {"colorMode": "background"},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "proxy_up",
+          "legendFormat": "Proxy Status",
+          "refId": "A"
+        }
+      ],
+      "title": "Proxy Status",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "percentunit"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
+      "id": 2,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "sum(rate(proxy_check_total{result=\"success\"}[24h])) / sum(rate(proxy_check_total[24h]))",
+          "legendFormat": "Uptime 24h",
+          "refId": "A"
+        }
+      ],
+      "title": "Uptime % (24h)",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "s"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 4},
+      "id": 3,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "histogram_quantile(0.50, rate(proxy_request_duration_seconds_bucket[5m]))",
+          "legendFormat": "p50",
+          "refId": "A"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "histogram_quantile(0.95, rate(proxy_request_duration_seconds_bucket[5m]))",
+          "legendFormat": "p95",
+          "refId": "B"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "histogram_quantile(0.99, rate(proxy_request_duration_seconds_bucket[5m]))",
+          "legendFormat": "p99",
+          "refId": "C"
+        }
+      ],
+      "title": "Proxy Latency (p50/p95/p99)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 12},
+      "id": 4,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "rate(proxy_check_total[5m])",
+          "legendFormat": "{{result}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Check Results Rate",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "tags": ["proxy"],
+  "time": {"from": "now-24h", "to": "now"},
+  "title": "Proxy Health",
+  "uid": "proxy-health",
+  "version": 1
+}

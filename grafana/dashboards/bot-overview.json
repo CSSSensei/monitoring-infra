@@ -1,0 +1,114 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "graphTooltip": 1,
+  "panels": [
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "reqps"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "id": 1,
+      "options": {"tooltip": {"mode": "multi"}},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "sum(rate(tg_updates_total[1m])) by (bot)",
+          "legendFormat": "{{bot}}",
+          "refId": "A"
+        }
+      ],
+      "title": "RPS (updates/sec)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "s"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "id": 2,
+      "options": {"tooltip": {"mode": "multi"}},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "histogram_quantile(0.50, sum(rate(tg_handler_duration_seconds_bucket[5m])) by (bot, le))",
+          "legendFormat": "p50 {{bot}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "histogram_quantile(0.95, sum(rate(tg_handler_duration_seconds_bucket[5m])) by (bot, le))",
+          "legendFormat": "p95 {{bot}}",
+          "refId": "B"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "histogram_quantile(0.99, sum(rate(tg_handler_duration_seconds_bucket[5m])) by (bot, le))",
+          "legendFormat": "p99 {{bot}}",
+          "refId": "C"
+        }
+      ],
+      "title": "Handler Latency (p50/p95/p99)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "s"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "id": 3,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "histogram_quantile(0.95, sum(rate(tg_api_call_duration_seconds_bucket[5m])) by (bot, le))",
+          "legendFormat": "p95 {{bot}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "histogram_quantile(0.99, sum(rate(tg_api_call_duration_seconds_bucket[5m])) by (bot, le))",
+          "legendFormat": "p99 {{bot}}",
+          "refId": "B"
+        }
+      ],
+      "title": "Telegram API Latency (p95/p99)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "s"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "id": 4,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "histogram_quantile(0.95, sum(rate(tg_long_polling_lag_seconds_bucket[5m])) by (bot, le))",
+          "legendFormat": "p95 lag {{bot}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Long Polling Lag (p95)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 16},
+      "id": 5,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "sum(rate(tg_errors_total[5m])) by (bot, error_type)",
+          "legendFormat": "{{bot}} / {{error_type}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Error Rate",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "tags": ["bots"],
+  "time": {"from": "now-3h", "to": "now"},
+  "title": "Bot Overview",
+  "uid": "bot-overview",
+  "version": 1
+}

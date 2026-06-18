@@ -1,0 +1,112 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "graphTooltip": 1,
+  "panels": [
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "percent", "max": 100, "min": 0}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "id": 1,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[1m])) * 100)",
+          "legendFormat": "CPU %",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU Usage %",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "bytes"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "id": 2,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes",
+          "legendFormat": "Used RAM",
+          "refId": "A"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "node_memory_MemTotal_bytes",
+          "legendFormat": "Total RAM",
+          "refId": "B"
+        }
+      ],
+      "title": "RAM Usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "Bps"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "id": 3,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "rate(node_disk_read_bytes_total[1m])",
+          "legendFormat": "Read {{device}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "rate(node_disk_written_bytes_total[1m])",
+          "legendFormat": "Write {{device}}",
+          "refId": "B"
+        }
+      ],
+      "title": "Disk I/O",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "Bps"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "id": 4,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "rate(node_network_receive_bytes_total{device!=\"lo\"}[1m])",
+          "legendFormat": "In {{device}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "rate(node_network_transmit_bytes_total{device!=\"lo\"}[1m])",
+          "legendFormat": "Out {{device}}",
+          "refId": "B"
+        }
+      ],
+      "title": "Network I/O",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 16},
+      "id": 5,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "node_netstat_Tcp_CurrEstab",
+          "legendFormat": "TCP established",
+          "refId": "A"
+        }
+      ],
+      "title": "Open TCP Connections",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "tags": ["server"],
+  "time": {"from": "now-3h", "to": "now"},
+  "title": "Server Health",
+  "uid": "server-health",
+  "version": 1
+}
