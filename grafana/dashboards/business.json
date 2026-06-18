@@ -4,9 +4,17 @@
   "graphTooltip": 1,
   "panels": [
     {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0},
+      "id": 100,
+      "title": "VIPSubBot",
+      "type": "row",
+      "panels": []
+    },
+    {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 1},
       "id": 1,
       "options": {"colorMode": "value", "graphMode": "area"},
       "targets": [
@@ -23,7 +31,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 1},
       "id": 2,
       "options": {"colorMode": "value", "graphMode": "area"},
       "targets": [
@@ -40,7 +48,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 5},
       "id": 3,
       "targets": [
         {
@@ -62,7 +70,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 5},
       "id": 4,
       "targets": [
         {
@@ -78,7 +86,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 12},
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 13},
       "id": 5,
       "targets": [
         {
@@ -90,6 +98,225 @@
       ],
       "title": "Promo Redemptions per hour",
       "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 21},
+      "id": 101,
+      "title": "Manicure (@Nude_n_red_bot)",
+      "type": "row",
+      "panels": []
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 22},
+      "id": 7,
+      "options": {"colorMode": "value", "graphMode": "area"},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "bot_appointments_pending{bot=\"manicure\"}",
+          "legendFormat": "Pending",
+          "refId": "A"
+        }
+      ],
+      "title": "Appointments Pending",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 22},
+      "id": 8,
+      "options": {"colorMode": "value", "graphMode": "area"},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "bot_appointments_upcoming{bot=\"manicure\"}",
+          "legendFormat": "Upcoming",
+          "refId": "A"
+        }
+      ],
+      "title": "Appointments Upcoming",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 22},
+      "id": 9,
+      "options": {"colorMode": "value", "graphMode": "area"},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "bot_slots_available{bot=\"manicure\"}",
+          "legendFormat": "Available",
+          "refId": "A"
+        }
+      ],
+      "title": "Slots Available",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 22},
+      "id": 10,
+      "options": {"colorMode": "value", "graphMode": "area"},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "sum(increase(bot_appointments_created_total{bot=\"manicure\"}[24h]))",
+          "legendFormat": "Created",
+          "refId": "A"
+        }
+      ],
+      "title": "New Appointments (24h)",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 26},
+      "id": 11,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "rate(bot_appointments_created_total{bot=\"manicure\"}[1h]) * 3600",
+          "legendFormat": "Created",
+          "refId": "A"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "rate(bot_users_registered_total{bot=\"manicure\"}[1h]) * 3600",
+          "legendFormat": "Users registered",
+          "refId": "B"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "rate(bot_slots_created_total{bot=\"manicure\"}[1h]) * 3600",
+          "legendFormat": "Slots created",
+          "refId": "C"
+        }
+      ],
+      "title": "Appointments / Users / Slots per hour",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 26},
+      "id": 12,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "rate(bot_appointment_status_changes_total{bot=\"manicure\"}[1h]) * 3600",
+          "legendFormat": "{{status}} / {{actor}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Appointment Status Changes per hour",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 34},
+      "id": 13,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "rate(bot_reminders_sent_total{bot=\"manicure\"}[1h]) * 3600",
+          "legendFormat": "Reminder {{kind}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Reminders Sent per hour by kind",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 34},
+      "id": 14,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "rate(bot_channel_updates_total{bot=\"manicure\"}[1h]) * 3600",
+          "legendFormat": "Channel {{action}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Channel Updates per hour by action",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 42},
+      "id": 15,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "100 * bot_bookings_with_photos_total{bot=\"manicure\"} / clamp_min(bot_appointments_created_total{bot=\"manicure\"}, 1)",
+          "legendFormat": "% with photos",
+          "refId": "A"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "100 * bot_bookings_with_comment_total{bot=\"manicure\"} / clamp_min(bot_appointments_created_total{bot=\"manicure\"}, 1)",
+          "legendFormat": "% with comment",
+          "refId": "B"
+        }
+      ],
+      "title": "Bookings with Photo / Comment (%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short", "decimals": 2}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 42},
+      "id": 16,
+      "options": {"colorMode": "value", "graphMode": "area"},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "bot_appointment_photos_per_booking_sum{bot=\"manicure\"} / clamp_min(bot_appointment_photos_per_booking_count{bot=\"manicure\"}, 1)",
+          "legendFormat": "Avg photos / booking",
+          "refId": "A"
+        }
+      ],
+      "title": "Avg Photos per Booking",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 50},
+      "id": 17,
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "histogram_quantile(0.5, sum(rate(bot_appointment_photos_per_booking_bucket{bot=\"manicure\"}[1h])) by (le))",
+          "legendFormat": "p50",
+          "refId": "A"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "histogram_quantile(0.9, sum(rate(bot_appointment_photos_per_booking_bucket{bot=\"manicure\"}[1h])) by (le))",
+          "legendFormat": "p90",
+          "refId": "B"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "histogram_quantile(0.99, sum(rate(bot_appointment_photos_per_booking_bucket{bot=\"manicure\"}[1h])) by (le))",
+          "legendFormat": "p99",
+          "refId": "C"
+        }
+      ],
+      "title": "Photos per Booking distribution (p50/p90/p99)",
+      "type": "timeseries"
     }
   ],
   "refresh": "60s",
@@ -98,5 +325,5 @@
   "time": {"from": "now-7d", "to": "now"},
   "title": "Business",
   "uid": "business",
-  "version": 1
+  "version": 2
 }
