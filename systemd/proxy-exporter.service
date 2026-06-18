@@ -6,7 +6,9 @@ After=network.target
 Type=simple
 User=nobody
 EnvironmentFile=/etc/proxy-exporter.env
-ExecStart=/usr/bin/python3 /opt/monitoring/exporters/proxy_exporter.py
+# Ubuntu 24.04 — externally-managed (PEP 668), aiohttp ставится в venv,
+# а не системно. venv создаётся при деплое: /opt/monitoring/.venv
+ExecStart=/opt/monitoring/.venv/bin/python /opt/monitoring/exporters/proxy_exporter.py
 Restart=on-failure
 RestartSec=10
 
