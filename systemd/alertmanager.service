@@ -5,6 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=alertmanager
+EnvironmentFile=-/etc/alertmanager/telegram-proxy.env
 ExecStart=/usr/local/bin/alertmanager \
   --config.file=/etc/alertmanager/alertmanager.yml \
   --storage.path=/var/lib/alertmanager \

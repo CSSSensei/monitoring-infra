@@ -17,6 +17,8 @@ receivers:
         message_thread_id: 261
         api_url: https://api.telegram.org
         parse_mode: HTML
+        http_config:
+          proxy_from_environment: true
         message: |
           {{ if eq .Status "firing" }}🚨 <b>Да блядь, опять что-то сломалось</b>{{ else }}🌿 <b>Всё снова заебись</b>{{ end }}
           <i>{{ .Alerts | len }} {{ if eq .Status "firing" }}шт. просит вашего внимания{{ else }}шт. разрешилось ❤️‍🩹{{ end }}</i>
