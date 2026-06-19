@@ -1,0 +1,78 @@
+groups:
+  - name: targets
+    rules:
+      - alert: TargetDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Таргет {{ $labels.job }} ушёл в закат ({{ $labels.instance }})"
+          description: "Prometheus уже больше 2 минут не может достучаться до {{ $labels.job }} ({{ $labels.instance }}). Оно живое вообще?"
+
+      - alert: BotServiceDown
+        expr: node_systemd_unit_state{name=~"vipsubbot.service|manicure.service", state="active"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Бот {{ $labels.name }} прилёг"
+          description: "systemd-юнит {{ $labels.name }} не активен уже больше 2 минут. Юзеры пишут в пустоту, иди подними что ли"
+
+  - name: host
+    rules:
+      - alert: DiskSpaceLow
+        expr: node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"} < 0.15
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Диск / подзабился ({{ $labels.instance }})"
+          description: "Свободно меньше 15% на /, и так уже 10 минут. Самое время прибраться, пока не поздно"
+
+      - alert: DiskSpaceCritical
+        expr: node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"} < 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Пиздец как мало места на диске / ({{ $labels.instance }})"
+          description: "Свободно меньше 5% на разделе / уже больше 5 минут — скоро всё встанет к хуям"
+
+      - alert: MemoryHigh
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < 0.10
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Память на исходе ({{ $labels.instance }})"
+          description: "Свободно меньше 10% RAM уже больше 10 минут. Ещё чуть-чуть и прилетит OOM-killer"
+
+      - alert: CpuHigh
+        expr: 1 - avg without (cpu) (rate(node_cpu_seconds_total{mode="idle"}[5m])) > 0.90
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CPU пашет как проклятый ({{ $labels.instance }})"
+          description: "Загрузка CPU выше 90% уже больше 15 минут. Кто-то явно жрёт всё подчистую"
+
+  - name: services
+    rules:
+      - alert: ProxyDown
+        expr: proxy_up == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Прокси сдох"
+          description: "proxy_exporter показывает proxy_up=0 уже больше 5 минут — прокси не отвечает, боты могут посасывают, скорее всего"
+
+      - alert: PrometheusConfigReloadFailed
+        expr: prometheus_config_last_reload_successful == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Prometheus подавился конфигом"
+          description: "Последний reload конфига прошёл с ошибкой (больше 5 минут). Где-то опечатка в правилах — глянь логи ёпта"

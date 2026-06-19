@@ -1,0 +1,29 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: telegram
+  group_by: [alertname, severity]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 3h
+
+receivers:
+  - name: telegram
+    telegram_configs:
+      - send_resolved: true
+        bot_token_file: /etc/alertmanager/telegram.token
+        chat_id: -1002143230743
+        api_url: https://api.telegram.org
+        parse_mode: HTML
+        message: |
+          {{ if eq .Status "firing" }}🚨 <b>Да блядь, опять что-то сломалось</b>{{ else }}🌿 <b>Всё снова заебись</b>{{ end }}
+          <i>{{ .Alerts | len }} {{ if eq .Status "firing" }}шт. просит вашего внимания{{ else }}шт. разрешилось ❤️‍🩹{{ end }}</i>
+          {{ range .Alerts }}
+          ┄┄┄┄┄┄┄┄┄┄┄┄┄
+          {{ if eq .Labels.severity "critical" }}🔴{{ else if eq .Labels.severity "warning" }}🟡{{ else }}🔵{{ end }} <b>{{ .Labels.alertname }}</b>
+          💬 {{ .Annotations.summary }}
+          {{ if .Annotations.description }}<i>{{ .Annotations.description }}</i>
+          {{ end }}{{ if .Labels.instance }}🥀 <code>{{ .Labels.instance }}</code>{{ end }}
+          {{ end }}
+          {{ if eq .Status "firing" }}<i>Админ глянь пж 🙏</i>{{ else }}<i>Зачилльтесь</i>{{ end }}
