@@ -239,7 +239,7 @@
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Отправленные напоминания по типу за 30 дней.",
       "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
-      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 30},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 30},
       "id": 17,
       "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
       "targets": [
@@ -255,7 +255,7 @@
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Обновления канала за 30 дней.",
       "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
-      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 30},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 30},
       "id": 18,
       "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
       "targets": [
@@ -266,19 +266,6 @@
       ],
       "title": "Обновления канала (30д)",
       "type": "table"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "description": "Созданные слоты по дням.",
-      "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "bars", "fillOpacity": 70, "lineWidth": 1}}, "overrides": []},
-      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 30},
-      "id": 19,
-      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
-      "targets": [
-        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_slots_created_total{bot=\"manicure\"}[1d]))", "legendFormat": "Слоты", "refId": "A"}
-      ],
-      "title": "Созданные слоты по дням",
-      "type": "timeseries"
     }
   ],
   "refresh": "5m",
@@ -287,5 +274,5 @@
   "time": {"from": "now-90d", "to": "now"},
   "title": "Business",
   "uid": "business",
-  "version": 3
+  "version": 4
 }
