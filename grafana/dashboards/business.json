@@ -13,95 +13,89 @@
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Активные подписки прямо сейчас.",
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
       "gridPos": {"h": 4, "w": 6, "x": 0, "y": 1},
       "id": 1,
-      "options": {"colorMode": "value", "graphMode": "area"},
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value_and_name"},
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "sum(bot_subscriptions_active) by (bot)",
-          "legendFormat": "{{bot}}",
-          "refId": "A"
-        }
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(bot_subscriptions_active) by (bot)", "legendFormat": "{{bot}}", "instant": true, "refId": "A"}
       ],
-      "title": "Active Subscriptions",
+      "title": "Активные подписки",
       "type": "stat"
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Новые подписки за 30 дней.",
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
       "gridPos": {"h": 4, "w": 6, "x": 6, "y": 1},
       "id": 2,
-      "options": {"colorMode": "value", "graphMode": "area"},
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value_and_name"},
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "sum(increase(bot_subscriptions_created_total[24h])) by (bot)",
-          "legendFormat": "{{bot}}",
-          "refId": "A"
-        }
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_subscriptions_created_total[30d])) by (bot))", "legendFormat": "{{bot}}", "instant": true, "refId": "A"}
       ],
-      "title": "New Subscriptions (24h)",
+      "title": "Новые подписки (30д)",
       "type": "stat"
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Истёкшие подписки за 30 дней.",
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 5},
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 1},
       "id": 3,
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value_and_name"},
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "rate(bot_subscriptions_created_total[1h]) * 3600",
-          "legendFormat": "Created {{bot}}",
-          "refId": "A"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "rate(bot_subscriptions_expired_total[1h]) * 3600",
-          "legendFormat": "Expired {{bot}}",
-          "refId": "B"
-        }
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_subscriptions_expired_total[30d])) by (bot))", "legendFormat": "{{bot}}", "instant": true, "refId": "A"}
       ],
-      "title": "Subscriptions per hour",
-      "type": "timeseries"
+      "title": "Истекло подписок (30д)",
+      "type": "stat"
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Активации промокодов за 30 дней.",
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 5},
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 1},
       "id": 4,
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value_and_name"},
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "rate(bot_payments_total[1h]) * 3600",
-          "legendFormat": "{{bot}} / {{status}}",
-          "refId": "A"
-        }
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_promo_redemptions_total[30d])) by (bot))", "legendFormat": "{{bot}}", "instant": true, "refId": "A"}
       ],
-      "title": "Payments per hour by status",
+      "title": "Промокоды (30д)",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Новые и истёкшие подписки по дням.",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "bars", "fillOpacity": 70, "lineWidth": 1}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 5},
+      "id": 5,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_subscriptions_created_total[1d])) by (bot)", "legendFormat": "Новые {{bot}}", "refId": "A"},
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_subscriptions_expired_total[1d])) by (bot)", "legendFormat": "Истекло {{bot}}", "refId": "B"}
+      ],
+      "title": "Подписки по дням",
       "type": "timeseries"
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 13},
-      "id": 5,
+      "description": "Платежи по статусу за 30 дней.",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 5},
+      "id": 6,
+      "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "rate(bot_promo_redemptions_total[1h]) * 3600",
-          "legendFormat": "Promo redemptions {{bot}}",
-          "refId": "A"
-        }
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_payments_total[30d])) by (bot, status))", "format": "table", "instant": true, "refId": "A"}
       ],
-      "title": "Promo Redemptions per hour",
-      "type": "timeseries"
+      "transformations": [
+        {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"bot": "Бот", "status": "Статус", "Value": "Кол-во (30д)"}}}
+      ],
+      "title": "Платежи по статусу (30д)",
+      "type": "table"
     },
     {
       "collapsed": false,
-      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 21},
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 13},
       "id": 101,
       "title": "Manicure (@Nude_n_red_bot)",
       "type": "row",
@@ -109,221 +103,189 @@
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Записи, ожидающие подтверждения мастером.",
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 22},
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 14},
       "id": 7,
-      "options": {"colorMode": "value", "graphMode": "area"},
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "bot_appointments_pending{bot=\"manicure\"}",
-          "legendFormat": "Pending",
-          "refId": "A"
-        }
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "bot_appointments_pending{bot=\"manicure\"}", "legendFormat": "Pending", "instant": true, "refId": "A"}
       ],
-      "title": "Appointments Pending",
+      "title": "Ожидают подтверждения",
       "type": "stat"
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Подтверждённые предстоящие записи.",
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 22},
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 14},
       "id": 8,
-      "options": {"colorMode": "value", "graphMode": "area"},
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "bot_appointments_upcoming{bot=\"manicure\"}",
-          "legendFormat": "Upcoming",
-          "refId": "A"
-        }
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "bot_appointments_upcoming{bot=\"manicure\"}", "legendFormat": "Upcoming", "instant": true, "refId": "A"}
       ],
-      "title": "Appointments Upcoming",
+      "title": "Предстоящие записи",
       "type": "stat"
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Свободные слоты для записи.",
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 22},
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 14},
       "id": 9,
-      "options": {"colorMode": "value", "graphMode": "area"},
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "bot_slots_available{bot=\"manicure\"}",
-          "legendFormat": "Available",
-          "refId": "A"
-        }
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "bot_slots_available{bot=\"manicure\"}", "legendFormat": "Available", "instant": true, "refId": "A"}
       ],
-      "title": "Slots Available",
+      "title": "Свободные слоты",
       "type": "stat"
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Новые записи за 30 дней.",
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 22},
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 14},
       "id": 10,
-      "options": {"colorMode": "value", "graphMode": "area"},
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "sum(increase(bot_appointments_created_total{bot=\"manicure\"}[24h]))",
-          "legendFormat": "Created",
-          "refId": "A"
-        }
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_appointments_created_total{bot=\"manicure\"}[30d])))", "legendFormat": "Created", "instant": true, "refId": "A"}
       ],
-      "title": "New Appointments (24h)",
+      "title": "Новые записи (30д)",
       "type": "stat"
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Новые пользователи за 30 дней.",
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 26},
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 18},
       "id": 11,
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "rate(bot_appointments_created_total{bot=\"manicure\"}[1h]) * 3600",
-          "legendFormat": "Created",
-          "refId": "A"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "rate(bot_users_registered_total{bot=\"manicure\"}[1h]) * 3600",
-          "legendFormat": "Users registered",
-          "refId": "B"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "rate(bot_slots_created_total{bot=\"manicure\"}[1h]) * 3600",
-          "legendFormat": "Slots created",
-          "refId": "C"
-        }
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_users_registered_total{bot=\"manicure\"}[30d])))", "legendFormat": "Users", "instant": true, "refId": "A"}
       ],
-      "title": "Appointments / Users / Slots per hour",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 26},
-      "id": 12,
-      "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "rate(bot_appointment_status_changes_total{bot=\"manicure\"}[1h]) * 3600",
-          "legendFormat": "{{status}} / {{actor}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Appointment Status Changes per hour",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 34},
-      "id": 13,
-      "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "rate(bot_reminders_sent_total{bot=\"manicure\"}[1h]) * 3600",
-          "legendFormat": "Reminder {{kind}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Reminders Sent per hour by kind",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 34},
-      "id": 14,
-      "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "rate(bot_channel_updates_total{bot=\"manicure\"}[1h]) * 3600",
-          "legendFormat": "Channel {{action}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Channel Updates per hour by action",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 42},
-      "id": 15,
-      "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "100 * bot_bookings_with_photos_total{bot=\"manicure\"} / clamp_min(bot_appointments_created_total{bot=\"manicure\"}, 1)",
-          "legendFormat": "% with photos",
-          "refId": "A"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "100 * bot_bookings_with_comment_total{bot=\"manicure\"} / clamp_min(bot_appointments_created_total{bot=\"manicure\"}, 1)",
-          "legendFormat": "% with comment",
-          "refId": "B"
-        }
-      ],
-      "title": "Bookings with Photo / Comment (%)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "short", "decimals": 2}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 42},
-      "id": 16,
-      "options": {"colorMode": "value", "graphMode": "area"},
-      "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "bot_appointment_photos_per_booking_sum{bot=\"manicure\"} / clamp_min(bot_appointment_photos_per_booking_count{bot=\"manicure\"}, 1)",
-          "legendFormat": "Avg photos / booking",
-          "refId": "A"
-        }
-      ],
-      "title": "Avg Photos per Booking",
+      "title": "Новые юзеры (30д)",
       "type": "stat"
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 50},
-      "id": 17,
+      "description": "Доля записей с приложенным фото (накопительно за всё время).",
+      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "decimals": 0}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 18},
+      "id": 12,
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "histogram_quantile(0.5, sum(rate(bot_appointment_photos_per_booking_bucket{bot=\"manicure\"}[1h])) by (le))",
-          "legendFormat": "p50",
-          "refId": "A"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "histogram_quantile(0.9, sum(rate(bot_appointment_photos_per_booking_bucket{bot=\"manicure\"}[1h])) by (le))",
-          "legendFormat": "p90",
-          "refId": "B"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "histogram_quantile(0.99, sum(rate(bot_appointment_photos_per_booking_bucket{bot=\"manicure\"}[1h])) by (le))",
-          "legendFormat": "p99",
-          "refId": "C"
-        }
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "100 * bot_bookings_with_photos_total{bot=\"manicure\"} / clamp_min(bot_appointments_created_total{bot=\"manicure\"}, 1)", "legendFormat": "% with photos", "instant": true, "refId": "A"}
       ],
-      "title": "Photos per Booking distribution (p50/p90/p99)",
+      "title": "% записей с фото",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Доля записей с комментарием (накопительно за всё время).",
+      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "decimals": 0}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 18},
+      "id": 13,
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "100 * bot_bookings_with_comment_total{bot=\"manicure\"} / clamp_min(bot_appointments_created_total{bot=\"manicure\"}, 1)", "legendFormat": "% with comment", "instant": true, "refId": "A"}
+      ],
+      "title": "% записей с комментом",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Среднее число фото на запись (по гистограмме).",
+      "fieldConfig": {"defaults": {"unit": "short", "decimals": 2}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 18},
+      "id": 14,
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "bot_appointment_photos_per_booking_sum{bot=\"manicure\"} / clamp_min(bot_appointment_photos_per_booking_count{bot=\"manicure\"}, 1)", "legendFormat": "Avg", "instant": true, "refId": "A"}
+      ],
+      "title": "Фото на запись (avg)",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Новые записи и регистрации по дням.",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "bars", "fillOpacity": 70, "lineWidth": 1}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 22},
+      "id": 15,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_appointments_created_total{bot=\"manicure\"}[1d]))", "legendFormat": "Записи", "refId": "A"},
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_users_registered_total{bot=\"manicure\"}[1d]))", "legendFormat": "Новые юзеры", "refId": "B"}
+      ],
+      "title": "Записи / юзеры по дням",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Смены статуса записей за 30 дней (кто и на какой статус сменил).",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 22},
+      "id": 16,
+      "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_appointment_status_changes_total{bot=\"manicure\"}[30d])) by (status, actor))", "format": "table", "instant": true, "refId": "A"}
+      ],
+      "transformations": [
+        {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"status": "Статус", "actor": "Кто", "Value": "Кол-во (30д)"}}}
+      ],
+      "title": "Смены статуса записей (30д)",
+      "type": "table"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Отправленные напоминания по типу за 30 дней.",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 30},
+      "id": 17,
+      "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_reminders_sent_total{bot=\"manicure\"}[30d])) by (kind))", "format": "table", "instant": true, "refId": "A"}
+      ],
+      "transformations": [
+        {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"kind": "Тип", "Value": "Кол-во (30д)"}}}
+      ],
+      "title": "Напоминания (30д)",
+      "type": "table"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Обновления канала за 30 дней.",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 30},
+      "id": 18,
+      "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_channel_updates_total{bot=\"manicure\"}[30d])) by (action))", "format": "table", "instant": true, "refId": "A"}
+      ],
+      "transformations": [
+        {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"action": "Действие", "Value": "Кол-во (30д)"}}}
+      ],
+      "title": "Обновления канала (30д)",
+      "type": "table"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Созданные слоты по дням.",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "bars", "fillOpacity": 70, "lineWidth": 1}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 30},
+      "id": 19,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_slots_created_total{bot=\"manicure\"}[1d]))", "legendFormat": "Слоты", "refId": "A"}
+      ],
+      "title": "Созданные слоты по дням",
       "type": "timeseries"
     }
   ],
-  "refresh": "60s",
+  "refresh": "5m",
   "schemaVersion": 38,
   "tags": ["business"],
-  "time": {"from": "now-7d", "to": "now"},
+  "time": {"from": "now-90d", "to": "now"},
   "title": "Business",
   "uid": "business",
-  "version": 2
+  "version": 3
 }
