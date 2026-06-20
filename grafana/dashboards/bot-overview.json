@@ -142,31 +142,9 @@
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "description": "Ошибки хендлеров по типу исключения за 30 дней.",
-      "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
-      "gridPos": {"h": 8, "w": 9, "x": 6, "y": 6},
-      "id": 6,
-      "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
-      "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "round(sum(increase(tg_errors_total[30d])) by (bot, error_type))",
-          "format": "table",
-          "instant": true,
-          "refId": "A"
-        }
-      ],
-      "transformations": [
-        {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"bot": "Бот", "error_type": "Тип", "Value": "Кол-во (30д)"}}}
-      ],
-      "title": "Handler errors по типам (30д)",
-      "type": "table"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Ошибки Telegram API по типу за 30 дней (flood/forbidden/bad_request/…).",
       "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
-      "gridPos": {"h": 8, "w": 9, "x": 15, "y": 6},
+      "gridPos": {"h": 8, "w": 18, "x": 6, "y": 6},
       "id": 7,
       "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
       "targets": [
@@ -185,8 +163,22 @@
       "type": "table"
     },
     {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Ошибки хендлеров по дням за последние 7 дней, сгруппировано по типу.",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "bars", "fillOpacity": 80, "lineWidth": 1, "stacking": {"mode": "normal"}}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 14},
+      "id": 11,
+      "timeFrom": "7d",
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(tg_errors_total[1d])) by (bot, error_type))", "legendFormat": "{{bot}} / {{error_type}}", "refId": "A"}
+      ],
+      "title": "Ошибки по дням (7д)",
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
-      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 14},
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 22},
       "id": 102,
       "title": "Активность",
       "type": "row",
@@ -199,7 +191,7 @@
         {"matcher": {"id": "byRegexp", "options": "/vip/i"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "blue"}}]},
         {"matcher": {"id": "byRegexp", "options": "/manic/i"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "purple"}}]}
       ]},
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 15},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 23},
       "id": 8,
       "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
       "targets": [
@@ -217,7 +209,7 @@
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Какие команды используют и сколько раз за 30 дней.",
       "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 15},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 23},
       "id": 9,
       "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
       "targets": [
@@ -242,5 +234,5 @@
   "time": {"from": "now-30d", "to": "now"},
   "title": "Bot Overview",
   "uid": "bot-overview",
-  "version": 4
+  "version": 6
 }
