@@ -14,7 +14,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Активные подписки прямо сейчас.",
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "green"}}, "overrides": []},
       "gridPos": {"h": 4, "w": 6, "x": 0, "y": 1},
       "id": 1,
       "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value_and_name"},
@@ -27,7 +27,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Новые подписки за 30 дней.",
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "green"}}, "overrides": []},
       "gridPos": {"h": 4, "w": 6, "x": 6, "y": 1},
       "id": 2,
       "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value_and_name"},
@@ -40,7 +40,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Истёкшие подписки за 30 дней.",
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "short", "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "orange", "value": 1}]}}, "overrides": []},
       "gridPos": {"h": 4, "w": 6, "x": 12, "y": 1},
       "id": 3,
       "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value_and_name"},
@@ -53,7 +53,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Активации промокодов за 30 дней.",
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "blue"}}, "overrides": []},
       "gridPos": {"h": 4, "w": 6, "x": 18, "y": 1},
       "id": 4,
       "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value_and_name"},
@@ -66,7 +66,10 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Новые и истёкшие подписки по дням.",
-      "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "bars", "fillOpacity": 70, "lineWidth": 1}}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "bars", "fillOpacity": 70, "lineWidth": 1}}, "overrides": [
+        {"matcher": {"id": "byRegexp", "options": "/^Новые/"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "green"}}]},
+        {"matcher": {"id": "byRegexp", "options": "/^Истекло/"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "red"}}]}
+      ]},
       "gridPos": {"h": 8, "w": 12, "x": 0, "y": 5},
       "id": 5,
       "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
@@ -104,7 +107,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Записи, ожидающие подтверждения мастером.",
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "short", "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 1}]}}, "overrides": []},
       "gridPos": {"h": 4, "w": 6, "x": 0, "y": 14},
       "id": 7,
       "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
@@ -117,7 +120,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Подтверждённые предстоящие записи.",
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "green"}}, "overrides": []},
       "gridPos": {"h": 4, "w": 6, "x": 6, "y": 14},
       "id": 8,
       "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
@@ -130,7 +133,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Свободные слоты для записи.",
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "blue"}}, "overrides": []},
       "gridPos": {"h": 4, "w": 6, "x": 12, "y": 14},
       "id": 9,
       "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
@@ -143,7 +146,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Новые записи за 30 дней.",
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "green"}}, "overrides": []},
       "gridPos": {"h": 4, "w": 6, "x": 18, "y": 14},
       "id": 10,
       "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
@@ -156,7 +159,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Новые пользователи за 30 дней.",
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "green"}}, "overrides": []},
       "gridPos": {"h": 4, "w": 6, "x": 0, "y": 18},
       "id": 11,
       "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
@@ -169,7 +172,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Доля записей с приложенным фото (накопительно за всё время).",
-      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "decimals": 0}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "decimals": 0, "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "orange", "value": 5}, {"color": "green", "value": 20}]}}, "overrides": []},
       "gridPos": {"h": 4, "w": 6, "x": 6, "y": 18},
       "id": 12,
       "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
@@ -182,7 +185,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Доля записей с комментарием (накопительно за всё время).",
-      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "decimals": 0}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100, "decimals": 0, "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "orange", "value": 5}, {"color": "green", "value": 20}]}}, "overrides": []},
       "gridPos": {"h": 4, "w": 6, "x": 12, "y": 18},
       "id": 13,
       "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
@@ -195,7 +198,7 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Среднее число фото на запись (по гистограмме).",
-      "fieldConfig": {"defaults": {"unit": "short", "decimals": 2}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "short", "decimals": 2, "color": {"mode": "fixed", "fixedColor": "purple"}}, "overrides": []},
       "gridPos": {"h": 4, "w": 6, "x": 18, "y": 18},
       "id": 14,
       "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
@@ -208,7 +211,10 @@
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "description": "Новые записи и регистрации по дням.",
-      "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "bars", "fillOpacity": 70, "lineWidth": 1}}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "bars", "fillOpacity": 70, "lineWidth": 1}}, "overrides": [
+        {"matcher": {"id": "byName", "options": "Записи"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "blue"}}]},
+        {"matcher": {"id": "byName", "options": "Новые юзеры"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "green"}}]}
+      ]},
       "gridPos": {"h": 8, "w": 12, "x": 0, "y": 22},
       "id": 15,
       "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
@@ -274,5 +280,5 @@
   "time": {"from": "now-90d", "to": "now"},
   "title": "Business",
   "uid": "business",
-  "version": 4
+  "version": 5
 }
