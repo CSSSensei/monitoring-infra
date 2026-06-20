@@ -4,111 +4,221 @@
   "graphTooltip": 1,
   "panels": [
     {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0},
+      "id": 100,
+      "title": "Состояние ботов",
+      "type": "row",
+      "panels": []
+    },
+    {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "reqps"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "description": "Запущен ли systemd-сервис бота прямо сейчас.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [{"type": "value", "options": {"0": {"text": "DOWN", "color": "red"}, "1": {"text": "UP", "color": "green"}}}],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]},
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 1},
       "id": 1,
-      "options": {"tooltip": {"mode": "multi"}},
+      "options": {"colorMode": "background", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "value_and_name"},
       "targets": [
         {
           "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "sum(rate(tg_updates_total[1m])) by (bot)",
+          "expr": "node_systemd_unit_state{name=~\"vipsubbot.service|manicureBot.service\", state=\"active\"}",
+          "legendFormat": "{{name}}",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Бот жив",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Уникальные пользователи за последние 30 дней (in-memory, сбрасывается при рестарте бота).",
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "green"}}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 1},
+      "id": 2,
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value_and_name"},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "tg_active_users_monthly",
+          "legendFormat": "{{bot}}",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "MAU (активны за 30д)",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Сколько всего апдейтов обработано за 30 дней.",
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 1},
+      "id": 3,
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value_and_name"},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "sum(increase(tg_updates_total[30d])) by (bot)",
+          "legendFormat": "{{bot}}",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Updates (30д)",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Сколько раз пользователи заблокировали бота (или кикнули из чата) за 30 дней",
+      "fieldConfig": {"defaults": {"unit": "short", "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "orange", "value": 1}]}}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 1},
+      "id": 4,
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value_and_name"},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "sum(increase(tg_bot_blocked_total[30d])) by (bot)",
+          "legendFormat": "{{bot}}",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Заблокировали бота (30д)",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 5},
+      "id": 101,
+      "title": "Ошибки",
+      "type": "row",
+      "panels": []
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Ошибки в хендлерах за 30 дней. Каждая — отдельное событие, которое стоит посмотреть.",
+      "fieldConfig": {"defaults": {"unit": "short", "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "red", "value": 1}]}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 6, "x": 0, "y": 6},
+      "id": 5,
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value_and_name"},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "sum(increase(tg_errors_total[30d])) by (bot)",
+          "legendFormat": "{{bot}}",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Handler errors (30д)",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Ошибки хендлеров по типу исключения за 30 дней.",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 9, "x": 6, "y": 6},
+      "id": 6,
+      "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "sum(increase(tg_errors_total[30d])) by (bot, error_type)",
+          "format": "table",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "transformations": [
+        {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"bot": "Бот", "error_type": "Тип", "Value": "Кол-во (30д)"}}}
+      ],
+      "title": "Handler errors по типам (30д)",
+      "type": "table"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Ошибки Telegram API по типу за 30 дней (flood/forbidden/bad_request/…).",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 9, "x": 15, "y": 6},
+      "id": 7,
+      "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "sum(increase(tg_api_errors_total[30d])) by (bot, error_type)",
+          "format": "table",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "transformations": [
+        {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"bot": "Бот", "error_type": "Тип", "Value": "Кол-во (30д)"}}}
+      ],
+      "title": "Telegram API errors по типам (30д)",
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 14},
+      "id": 102,
+      "title": "Активность",
+      "type": "row",
+      "panels": []
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Активность по дням (скользящая сумма апдейтов за сутки). Бары, а не линия — так разреженные события читаются.",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "bars", "fillOpacity": 70, "lineWidth": 1, "barAlignment": 0}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 15},
+      "id": 8,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "expr": "sum(increase(tg_updates_total[1d])) by (bot)",
           "legendFormat": "{{bot}}",
           "refId": "A"
         }
       ],
-      "title": "RPS (updates/sec)",
+      "title": "Updates по дням",
       "type": "timeseries"
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "s"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
-      "id": 2,
-      "options": {"tooltip": {"mode": "multi"}},
+      "description": "Какие команды используют и сколько раз за 30 дней.",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 15},
+      "id": 9,
+      "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
       "targets": [
         {
           "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "histogram_quantile(0.50, sum(rate(tg_handler_duration_seconds_bucket[5m])) by (bot, le))",
-          "legendFormat": "p50 {{bot}}",
-          "refId": "A"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "histogram_quantile(0.95, sum(rate(tg_handler_duration_seconds_bucket[5m])) by (bot, le))",
-          "legendFormat": "p95 {{bot}}",
-          "refId": "B"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "histogram_quantile(0.99, sum(rate(tg_handler_duration_seconds_bucket[5m])) by (bot, le))",
-          "legendFormat": "p99 {{bot}}",
-          "refId": "C"
-        }
-      ],
-      "title": "Handler Latency (p50/p95/p99)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "s"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
-      "id": 3,
-      "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "histogram_quantile(0.95, sum(rate(tg_api_call_duration_seconds_bucket[5m])) by (bot, le))",
-          "legendFormat": "p95 {{bot}}",
-          "refId": "A"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "histogram_quantile(0.99, sum(rate(tg_api_call_duration_seconds_bucket[5m])) by (bot, le))",
-          "legendFormat": "p99 {{bot}}",
-          "refId": "B"
-        }
-      ],
-      "title": "Telegram API Latency (p95/p99)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "s"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
-      "id": 4,
-      "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "histogram_quantile(0.95, sum(rate(tg_long_polling_lag_seconds_bucket[5m])) by (bot, le))",
-          "legendFormat": "p95 lag {{bot}}",
+          "expr": "sum(increase(tg_commands_total[30d])) by (bot, command)",
+          "format": "table",
+          "instant": true,
           "refId": "A"
         }
       ],
-      "title": "Long Polling Lag (p95)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 16},
-      "id": 5,
-      "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "sum(rate(tg_errors_total[5m])) by (bot, error_type)",
-          "legendFormat": "{{bot}} / {{error_type}}",
-          "refId": "A"
-        }
+      "transformations": [
+        {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"bot": "Бот", "command": "Команда", "Value": "Кол-во (30д)"}}}
       ],
-      "title": "Error Rate",
-      "type": "timeseries"
+      "title": "Команды (30д)",
+      "type": "table"
     }
   ],
-  "refresh": "30s",
+  "refresh": "1m",
   "schemaVersion": 38,
   "tags": ["bots"],
-  "time": {"from": "now-3h", "to": "now"},
+  "time": {"from": "now-30d", "to": "now"},
   "title": "Bot Overview",
   "uid": "bot-overview",
-  "version": 1
+  "version": 2
 }
