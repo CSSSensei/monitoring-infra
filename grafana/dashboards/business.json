@@ -74,8 +74,8 @@
       "id": 5,
       "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
       "targets": [
-        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_subscriptions_created_total[1d])) by (bot)", "legendFormat": "Новые {{bot}}", "refId": "A"},
-        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_subscriptions_expired_total[1d])) by (bot)", "legendFormat": "Истекло {{bot}}", "refId": "B"}
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_subscriptions_created_total[1d])) by (bot)", "interval": "1d", "legendFormat": "Новые {{bot}}", "refId": "A"},
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_subscriptions_expired_total[1d])) by (bot)", "interval": "1d", "legendFormat": "Истекло {{bot}}", "refId": "B"}
       ],
       "title": "Подписки по дням",
       "type": "timeseries"
@@ -219,8 +219,8 @@
       "id": 15,
       "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
       "targets": [
-        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_appointments_created_total{bot=\"manicure\"}[1d]))", "legendFormat": "Записи", "refId": "A"},
-        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_users_registered_total{bot=\"manicure\"}[1d]))", "legendFormat": "Новые юзеры", "refId": "B"}
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_appointments_created_total{bot=\"manicure\"}[1d]))", "interval": "1d", "legendFormat": "Записи", "refId": "A"},
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_users_registered_total{bot=\"manicure\"}[1d]))", "interval": "1d", "legendFormat": "Новые юзеры", "refId": "B"}
       ],
       "title": "Записи / юзеры по дням",
       "type": "timeseries"
@@ -394,7 +394,7 @@
       "id": 26,
       "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
       "targets": [
-        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_posts_total{bot=\"pptpi\"}[1d])) by (action)", "legendFormat": "{{action}}", "refId": "A"}
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_posts_total{bot=\"pptpi\"}[1d])) by (action)", "interval": "1d", "legendFormat": "{{action}}", "refId": "A"}
       ],
       "title": "Посты по дням",
       "type": "timeseries"

@@ -149,7 +149,7 @@
       "timeFrom": "7d",
       "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
       "targets": [
-        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(tg_errors_total[1d])) by (bot, error_type))", "legendFormat": "{{bot}} / {{error_type}}", "refId": "A"}
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(tg_errors_total[1d])) by (bot, error_type))", "interval": "1d", "legendFormat": "{{bot}} / {{error_type}}", "refId": "A"}
       ],
       "title": "Ошибки по дням (7д)",
       "type": "timeseries"
@@ -186,7 +186,7 @@
     },
     {
       "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "description": "Активность по дням (скользящая сумма апдейтов за сутки)",
+      "description": "Активность по дням.",
       "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "bars", "fillOpacity": 70, "lineWidth": 1, "barAlignment": 0}}, "overrides": [
         {"matcher": {"id": "byRegexp", "options": "/vip/i"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "blue"}}]},
         {"matcher": {"id": "byRegexp", "options": "/manic/i"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "purple"}}]},
@@ -199,6 +199,7 @@
         {
           "datasource": {"type": "prometheus", "uid": "prometheus"},
           "expr": "sum(increase(tg_updates_total[1d])) by (bot)",
+          "interval": "1d",
           "legendFormat": "{{bot}}",
           "refId": "A"
         }
