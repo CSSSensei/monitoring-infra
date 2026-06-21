@@ -131,7 +131,7 @@
       "targets": [
         {
           "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "round(sum(increase(tg_errors_total[30d])) by (bot))",
+          "expr": "round(sum(increase(tg_errors_total[30d])) by (bot)) or (sum(tg_updates_total) by (bot) * 0)",
           "legendFormat": "{{bot}}",
           "instant": true,
           "refId": "A"
@@ -236,5 +236,5 @@
   "time": {"from": "now-30d", "to": "now"},
   "title": "Bot Overview",
   "uid": "bot-overview",
-  "version": 8
+  "version": 9
 }
