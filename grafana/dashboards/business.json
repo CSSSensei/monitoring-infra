@@ -272,6 +272,148 @@
       ],
       "title": "Обновления канала (30д)",
       "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 38},
+      "id": 102,
+      "title": "PPTPIbot (@pptpibot)",
+      "type": "row",
+      "panels": []
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Всего зарегистрированных пользователей.",
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "blue"}}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 39},
+      "id": 19,
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "bot_users_total{bot=\"pptpi\"}", "legendFormat": "Users", "instant": true, "refId": "A"}
+      ],
+      "title": "Пользователи",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Новые пользователи за 30 дней.",
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "green"}}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 39},
+      "id": 21,
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_users_registered_total{bot=\"pptpi\"}[30d])))", "legendFormat": "New users", "instant": true, "refId": "A"}
+      ],
+      "title": "Новые юзеры (30д)",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Опубликованные посты за 30 дней.",
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "green"}}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 39},
+      "id": 22,
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_posts_total{bot=\"pptpi\", action=\"published\"}[30d])))", "legendFormat": "Published", "instant": true, "refId": "A"}
+      ],
+      "title": "Опубликовано постов (30д)",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Inline-запросы за 30 дней.",
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "blue"}}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 39},
+      "id": 28,
+      "options": {"colorMode": "value", "graphMode": "none", "reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "textMode": "value"},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_inline_queries_total{bot=\"pptpi\"}[30d])))", "legendFormat": "Inline", "instant": true, "refId": "A"}
+      ],
+      "title": "Inline-запросы (30д)",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Посты по статусу за 30 дней (предложено / опубликовано / отклонено / отменено).",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 43},
+      "id": 23,
+      "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_posts_total{bot=\"pptpi\"}[30d])) by (action))", "format": "table", "instant": true, "refId": "A"}
+      ],
+      "transformations": [
+        {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"action": "Статус", "Value": "Кол-во (30д)"}}}
+      ],
+      "title": "Посты по статусу (30д)",
+      "type": "table"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Запросы песен по типу за 30 дней (admin_song / mood_song / mrr).",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 43},
+      "id": 24,
+      "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_song_requests_total{bot=\"pptpi\"}[30d])) by (kind))", "format": "table", "instant": true, "refId": "A"}
+      ],
+      "transformations": [
+        {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"kind": "Тип", "Value": "Кол-во (30д)"}}}
+      ],
+      "title": "Запросы песен по типу (30д)",
+      "type": "table"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Форматирование строк песен по источнику за 30 дней (private / inline).",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 43},
+      "id": 25,
+      "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_song_lines_formatted_total{bot=\"pptpi\"}[30d])) by (source))", "format": "table", "instant": true, "refId": "A"}
+      ],
+      "transformations": [
+        {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"source": "Источник", "Value": "Кол-во (30д)"}}}
+      ],
+      "title": "Строки песен по источнику (30д)",
+      "type": "table"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Посты по статусу по дням.",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "bars", "fillOpacity": 70, "lineWidth": 1, "stacking": {"mode": "normal"}}}, "overrides": [
+        {"matcher": {"id": "byName", "options": "published"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "green"}}]},
+        {"matcher": {"id": "byName", "options": "suggested"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "blue"}}]},
+        {"matcher": {"id": "byName", "options": "rejected"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "red"}}]},
+        {"matcher": {"id": "byName", "options": "cancelled"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "orange"}}]}
+      ]},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 51},
+      "id": 26,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(bot_posts_total{bot=\"pptpi\"}[1d])) by (action)", "legendFormat": "{{action}}", "refId": "A"}
+      ],
+      "title": "Посты по дням",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Обновления админ-песни по типу за 30 дней (admin / mood).",
+      "fieldConfig": {"defaults": {"unit": "short", "custom": {"align": "auto"}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 51},
+      "id": 27,
+      "options": {"showHeader": true, "sortBy": [{"displayName": "Кол-во (30д)", "desc": true}]},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "round(sum(increase(bot_admin_song_updated_total{bot=\"pptpi\"}[30d])) by (kind))", "format": "table", "instant": true, "refId": "A"}
+      ],
+      "transformations": [
+        {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"kind": "Тип", "Value": "Кол-во (30д)"}}}
+      ],
+      "title": "Обновления админ-песни (30д)",
+      "type": "table"
     }
   ],
   "refresh": "5m",
@@ -280,5 +422,5 @@
   "time": {"from": "now-90d", "to": "now"},
   "title": "Business",
   "uid": "business",
-  "version": 5
+  "version": 6
 }

@@ -28,7 +28,7 @@
       "targets": [
         {
           "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "expr": "node_systemd_unit_state{name=~\"vipsubbot.service|manicureBot.service\", state=\"active\"}",
+          "expr": "node_systemd_unit_state{name=~\"vipsubbot.service|manicureBot.service|PPTPIBot.service\", state=\"active\"}",
           "legendFormat": "{{name}}",
           "instant": true,
           "refId": "A"
@@ -189,7 +189,8 @@
       "description": "Активность по дням (скользящая сумма апдейтов за сутки)",
       "fieldConfig": {"defaults": {"unit": "short", "custom": {"drawStyle": "bars", "fillOpacity": 70, "lineWidth": 1, "barAlignment": 0}}, "overrides": [
         {"matcher": {"id": "byRegexp", "options": "/vip/i"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "blue"}}]},
-        {"matcher": {"id": "byRegexp", "options": "/manic/i"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "purple"}}]}
+        {"matcher": {"id": "byRegexp", "options": "/manic/i"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "purple"}}]},
+        {"matcher": {"id": "byRegexp", "options": "/pptpi/i"}, "properties": [{"id": "color", "value": {"mode": "fixed", "fixedColor": "orange"}}]}
       ]},
       "gridPos": {"h": 8, "w": 12, "x": 0, "y": 15},
       "id": 8,
@@ -234,5 +235,5 @@
   "time": {"from": "now-30d", "to": "now"},
   "title": "Bot Overview",
   "uid": "bot-overview",
-  "version": 7
+  "version": 8
 }
